@@ -48,7 +48,6 @@ class ModelTrainer:
                 "Splitting training and testing data"
             )
 
-            # Convert DataFrame to NumPy array if needed
             train_array = np.asarray(train_array)
             test_array = np.asarray(test_array)
 
@@ -87,22 +86,133 @@ class ModelTrainer:
                     AdaBoostRegressor()
             }
 
+            param = {
+
+                "DecisionTreeRegressor": {
+                    "criterion": [
+                        "squared_error",
+                        "friedman_mse",
+                        "absolute_error",
+                        "poisson"
+                    ]
+                },
+
+                "GradientBoostingRegressor": {
+                    "learning_rate": [
+                        0.1,
+                        0.01,
+                        0.05,
+                        0.001
+                    ],
+                    "n_estimators": [
+                        8,
+                        16,
+                        32,
+                        64,
+                        128,
+                        256
+                    ]
+                },
+
+                "RandomForestRegressor": {
+                    "n_estimators": [
+                        8,
+                        16,
+                        32,
+                        64,
+                        128,
+                        256
+                    ]
+                },
+
+                "XGBRegressor": {
+                    "learning_rate": [
+                        0.1,
+                        0.01,
+                        0.05,
+                        0.001
+                    ],
+                    "n_estimators": [
+                        8,
+                        16,
+                        32,
+                        64,
+                        128,
+                        256
+                    ]
+                },
+
+                "KNeighborsRegressor": {
+                    "n_neighbors": [
+                        5,
+                        7,
+                        9,
+                        11
+                    ]
+                },
+
+                "CatBoostRegressor": {
+                    "depth": [
+                        6,
+                        8,
+                        10
+                    ],
+                    "learning_rate": [
+                        0.1,
+                        0.01,
+                        0.05,
+                        0.001
+                    ],
+                    "iterations": [
+                        30,
+                        50,
+                        100
+                    ]
+                },
+
+                "AdaBoostRegressor": {
+                    "learning_rate": [
+                        0.1,
+                        0.01,
+                        0.05,
+                        0.001
+                    ],
+                    "n_estimators": [
+                        8,
+                        16,
+                        32,
+                        64,
+                        128,
+                        256
+                    ]
+                },
+
+                "LinearRegression": {}
+            }
+
             model_report = evaluate_models(
                 X_train=X_train,
                 y_train=y_train,
                 X_test=X_test,
                 y_test=y_test,
-                models=models
+                models=models,
+                param=param
             )
+
             print("\nModel Performance Report")
             print("-" * 50)
 
             for model_name, score in model_report.items():
-               print(f"{model_name}: {score:.4f} ({score*100:.2f}%)")
+                print(
+                    f"{model_name}: "
+                    f"{score:.4f} "
+                    f"({score * 100:.2f}%)"
+                )
+
             logging.info(
                 f"Model Report: {model_report}"
             )
-       
+
             best_model_score = max(
                 model_report.values()
             )
@@ -119,12 +229,14 @@ class ModelTrainer:
                 best_model_name
             ]
 
-            logging.info(
-                f"Best Model Found: {best_model_name}"
-            )
+            print("\nBest Model")
+            print("-" * 50)
+            print(f"Model Name : {best_model_name}")
+            print(f"R2 Score   : {best_model_score:.4f}")
+            print(f"Percentage : {best_model_score * 100:.2f}%")
 
             logging.info(
-                f"Best Model Score: {best_model_score}"
+                f"Best Model Found: {best_model_name}"
             )
 
             best_model.fit(
