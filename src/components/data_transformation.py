@@ -224,5 +224,5 @@ if __name__ == "__main__":
         )
     )
 
-    print(train_arr.head())
-    print(test_arr.head())
+    print(train_arr.tail())
+    print(test_arr.tail())

@@ -94,11 +94,15 @@ class ModelTrainer:
                 y_test=y_test,
                 models=models
             )
+            print("\nModel Performance Report")
+            print("-" * 50)
 
+            for model_name, score in model_report.items():
+               print(f"{model_name}: {score:.4f} ({score*100:.2f}%)")
             logging.info(
                 f"Model Report: {model_report}"
             )
-
+       
             best_model_score = max(
                 model_report.values()
             )
